@@ -10,7 +10,7 @@ const {
 function invokeAction({ action, id, name, email, phone }) {
 	switch (action) {
 		case "list":
-			listContacts;
+			listContacts();
 			break;
 
 		case "get":

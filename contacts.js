@@ -6,9 +6,8 @@ const contactsPath = path.normalize("./db/contacts.json");
 
 async function listContacts() {
 	try {
-		await fs.readFile(contactsPath).then(res => {
-			console.table(JSON.parse(res.toString()));
-		});
+		const list = await fs.readFile(contactsPath);
+		console.table(JSON.parse(list.toString()));
 	} catch (error) {
 		console.log(error);
 	}
@@ -16,10 +15,11 @@ async function listContacts() {
 
 async function getContactsById(contactId) {
 	try {
-		const list = await fs
-			.readFile(contactsPath)
-			.then(res => JSON.parse(res.toString()));
-		console.table(list.find(item => item.id === contactId));
+		const list = await fs.readFile(contactsPath);
+		const contact = JSON.parse(list.toString()).find(
+			item => item.id === contactId
+		);
+		console.table(contact);
 	} catch (error) {
 		console.log(error);
 	}
@@ -27,14 +27,12 @@ async function getContactsById(contactId) {
 
 async function removeContact(contactId) {
 	try {
-		const list = await fs
-			.readFile(contactsPath)
-			.then(res => JSON.parse(res.toString()));
+		const list = await fs.readFile(contactsPath);
+		const contactsList = JSON.parse(list);
+		const filterList = contactsList.filter(item => item.id !== contactId);
 
-		const filterLIst = list.filter(item => item.id !== contactId);
-
-		await fs.writeFile(contactsPath, JSON.stringify(filterLIst));
-		console.table(filterLIst);
+		await fs.writeFile(contactsPath, JSON.stringify(filterList, null, 2));
+		console.table(filterList);
 	} catch (error) {
 		console.log(error);
 	}
@@ -43,13 +41,11 @@ async function removeContact(contactId) {
 async function addContact(name, email, phone) {
 	const newContact = { id: uniqid(), name, email, phone };
 	try {
-		const list = await fs
-			.readFile(contactsPath)
-			.then(res => JSON.parse(res.toString()));
-		list.push(newContact);
+		const list = await fs.readFile(contactsPath);
+		const newContactsList = [...JSON.parse(list), newContact];
 
-		await fs.writeFile(contactsPath, JSON.stringify(list));
-		console.table(list);
+		await fs.writeFile(contactsPath, JSON.stringify(newContactsList));
+		console.table(newContactsList);
 	} catch (error) {
 		console.log(error);
 	}
