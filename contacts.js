@@ -55,7 +55,7 @@ async function addContact(name, email, phone) {
 	}
 }
 
-module.export = {
+module.exports = {
 	listContacts,
 	getContactsById,
 	removeContact,
